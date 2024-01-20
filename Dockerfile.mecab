@@ -1,0 +1,41 @@
+FROM ubuntu:latest
+LABEL maintainer="mineru98 <mineru664500@gmail.com>"
+ARG PYTHON_VERSION=3.7
+
+ENV LANG=C.UTF-8
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHON_VERSION=python${PYTHON_VERSION}
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends tzdata g++ curl git
+
+# install java
+RUN apt-get install -y openjdk-8-jdk
+ENV JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
+
+# install python
+RUN apt-get install -y python3-pip python3-dev
+RUN : \
+    && apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        software-properties-common \
+    && add-apt-repository -y ppa:deadsnakes \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        ${PYTHON_VERSION}-venv \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && :
+
+RUN ${PYTHON_VERSION} -m venv /venv
+ENV PATH=/venv/bin:$PATH
+
+# apt clean
+RUN apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
+RUN bash -c "$(curl https://raw.githubusercontent.com/konlpy/konlpy/master/scripts/mecab.sh)"
+
+# copy resources
+COPY . .
+
+# install python package
+RUN pip install -r requirements.txt
