@@ -19,10 +19,6 @@ docker pull mineru/konlpy-fastapi:py37
 docker pull mineru/konlpy-fastapi:py38
 docker pull mineru/konlpy-fastapi:py39
 docker pull mineru/konlpy-fastapi:py310
-
-docker pull mineru/konlpy-fastapi:py37-mecab
-docker pull mineru/konlpy-fastapi:py38-mecab
-docker pull mineru/konlpy-fastapi:py39-mecab
 docker pull mineru/konlpy-fastapi:py310-mecab
 ```
 
